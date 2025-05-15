@@ -1,9 +1,24 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import App from './App.jsx'
+import { StrictMode } from "react";
+import React from "react";
+import ReactDOM from "react-dom/client";
+import { createRoot } from "react-dom/client";
+import App from "./App.jsx";
+import HomeScreen from "./screens/HomeScreen.jsx";
+import { createBrowserRouter, createRoutesFromElements, Route, RouterProvider } from "react-router-dom";
+import ProductScreen from "./screens/ProductScreen.jsx";
+// import "bootstrap/dist/css/bootstrap.min.css";
+// (old bootstrap)
+//new custom bootstrap and styling
+import "./assets/styles/bootstrap.custom.css";
+import "./assets/styles/index.css";
 
-createRoot(document.getElementById('root')).render(
-  <StrictMode>
-    <App />
-  </StrictMode>,
-)
+const router = createBrowserRouter(
+  createRoutesFromElements(
+    <Route path="/" element={<App></App>}>
+      <Route index={true} path="/" element={<HomeScreen></HomeScreen>}></Route>
+      <Route path="/product/:id" element={<ProductScreen></ProductScreen>}></Route>
+    </Route>
+  )
+);
+
+createRoot(document.getElementById("root")).render(<RouterProvider router={router} />);
