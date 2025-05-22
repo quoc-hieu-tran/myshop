@@ -1,0 +1,32 @@
+{
+  "name": "myshop",
+  "version": "1.0.0",
+  "description": "E-commerce application built with the MERN stack",
+  "homepage": "https://github.com/quoc-hieu-tran/myshop#readme",
+  "bugs": {
+    "url": "https://github.com/quoc-hieu-tran/myshop/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/quoc-hieu-tran/myshop.git"
+  },
+  "license": "ISC",
+  "author": "RickTran",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "start": "node backend/server.js",
+    "server": "nodemon backend/server.js",
+    "client": "npm start --prefix frontend",
+    "dev": "concurrently \"npm run server\" \"npm run client\""
+  },
+  "dependencies": {
+    "express": "^5.1.0"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2",
+    "dotenv": "^16.5.0",
+    "nodemon": "^3.1.10"
+  }
+
+}
