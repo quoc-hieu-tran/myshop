@@ -12,6 +12,9 @@ import ProductScreen from "./screens/ProductScreen.jsx";
 import "./assets/styles/bootstrap.custom.css";
 import "./assets/styles/index.css";
 
+import { Provider } from "react-redux";
+import store from "./store.js";
+
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<App></App>}>
@@ -21,4 +24,6 @@ const router = createBrowserRouter(
   )
 );
 
-createRoot(document.getElementById("root")).render(<RouterProvider router={router} />);
+createRoot(document.getElementById("root")).render(
+<Provider store={store}><RouterProvider router={router} /></Provider>
+);
