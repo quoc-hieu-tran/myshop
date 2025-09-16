@@ -6,6 +6,7 @@ import App from "./App.jsx";
 import HomeScreen from "./screens/HomeScreen.jsx";
 import { createBrowserRouter, createRoutesFromElements, Route, RouterProvider } from "react-router-dom";
 import ProductScreen from "./screens/ProductScreen.jsx";
+import CartScreen from "./screens/CartScreen.jsx";
 // import "bootstrap/dist/css/bootstrap.min.css";
 // (old bootstrap)
 //new custom bootstrap and styling
@@ -20,10 +21,13 @@ const router = createBrowserRouter(
     <Route path="/" element={<App></App>}>
       <Route index={true} path="/" element={<HomeScreen></HomeScreen>}></Route>
       <Route path="/product/:id" element={<ProductScreen></ProductScreen>}></Route>
+      <Route path="/cart" element={<CartScreen />}></Route>
     </Route>
   )
 );
 
 createRoot(document.getElementById("root")).render(
-<Provider store={store}><RouterProvider router={router} /></Provider>
+  <Provider store={store}>
+    <RouterProvider router={router} />
+  </Provider>
 );
