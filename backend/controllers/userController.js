@@ -97,7 +97,9 @@ if (!user) {
   if (req.body.password) {
     user.password = req.body.password;
   }
+
 const updatedUser = await user.save();
+
 return res.status(200).json({
     _id: updatedUser._id,
     name: updatedUser.name,

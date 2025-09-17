@@ -17,7 +17,7 @@ import {
 // /api/users
 router
   .route("/")
-  .get(getUsers) 
+  .get(protect, admin, getUsers) //only Admin
   .post(registerUser); // Public
 // /api/users/login
 router.post("/auth", authUser); // Public

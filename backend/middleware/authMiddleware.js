@@ -26,7 +26,7 @@ const protect = asyncHandler(async (req, res, next) => {
 // Admin guard
 const admin = (req, res, next) => {
   if (req.user && req.user.isAdmin) {
-    return next();
+    return next(); //we want the function to stop here, we can use if-else if we don't wanna use return statement
   }
   res.status(401);
   throw new Error("Not authorized as admin");
