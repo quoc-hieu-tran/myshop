@@ -19,7 +19,7 @@ import LoginScreen from "./screens/LoginScreen.jsx";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import RegisterScreen from "./screens/RegisterScreen.jsx";
-
+import ShippingScreen from "./screens/ShippingScreen.jsx";
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<App></App>}>
@@ -28,6 +28,7 @@ const router = createBrowserRouter(
       <Route path="/cart" element={<CartScreen />}></Route>
       <Route path="/login" element={<LoginScreen />} />
       <Route path="/register" element={<RegisterScreen />} />
+      <Route path="/shipping" element={<ShippingScreen />} />
     </Route>
   )
 );

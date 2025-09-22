@@ -8,7 +8,7 @@ import { addToCart, removeFromCart } from "../slices/cartSlice";
 const CartScreen = (props) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { cartItems } = useSelector((state) => state.cart);
+  const { cartItems } = useSelector((state) => state.cart); //destructuring state.cart
   const addToCartHandler = async (product, qty) => {
     dispatch(addToCart({ ...product, qty }));
   };

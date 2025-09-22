@@ -12,6 +12,14 @@ export const updateCart = (state) => {
   state.shippingPrice = addDecimals(state.itemsPrice > 100 ? 100 : 0);
   state.taxPrice = addDecimals(Number(state.itemsPrice * 0.15));
   state.totalPrice = addDecimals(Number(state.itemsPrice) + Number(state.taxPrice) + Number(state.shippingPrice));
-  localStorage.setItem("cart", JSON.stringify(state.cartItems));
+
+  localStorage.setItem(
+    "cart",
+    JSON.stringify({
+      cartItems: state.cartItems,
+      shippingAddress: state.shippingAddress,
+      paymentMethod: state.paymentMethod,
+    })
+  );
   return state;
 };
