@@ -57,7 +57,7 @@ const registerUser = asyncHandler(async (req, res) => {
 const logoutUser = asyncHandler(async (req, res) => {
   res.cookie("JWT", "", {
     httpOnly: true,
-    expires: new Date(0), // epoch → instantly expired
+    expires: new Date(0), // instantly expired
   });
   return res.status(200).json({ message: "Logged out successfully" });
 });
