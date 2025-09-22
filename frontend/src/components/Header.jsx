@@ -3,14 +3,29 @@ import { Navbar, Nav, Container, NavDropdown } from "react-bootstrap";
 import { FaShoppingCart, FaUser } from "react-icons/fa";
 import logo from "../assets/react.svg";
 import { LinkContainer } from "react-router-bootstrap";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { Badge } from "react-bootstrap";
+import { useLogoutMutation } from "../slices/usersApiSlice";
+import { logout } from "../slices/authSlice";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const Header = (props) => {
   const { cartItems } = useSelector((state) => state.cart);
   const { userInfo } = useSelector((state) => state.auth);
-  const logoutHandler = () => {
-    console.log("logout"); // will implement later in Logout video
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const [logoutApiCall] = useLogoutMutation();
+
+  const logoutHandler = async () => {
+    try {
+      await logoutApiCall().unwrap(); // server: destroy cookie
+      dispatch(logout()); // client: clear Redux + localStorage
+      navigate("/login"); // go to Sign In screen
+    } catch (err) {
+      console.error(err);
+      toast.error(err?.data?.message || err?.error || "Logout failed");
+    }
   };
 
   return (
@@ -42,7 +57,6 @@ const Header = (props) => {
                     <NavDropdown.Item onClick={logoutHandler}>Logout</NavDropdown.Item>
                   </NavDropdown>
                 ) : (
-                  // your existing Sign In link here
                   <LinkContainer to="/login">
                     <Nav.Link>
                       <FaUser /> Sign In
