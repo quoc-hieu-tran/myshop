@@ -1,13 +1,44 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { Form, Button, Row, Col } from "react-bootstrap";
+import { useDispatch, useSelector } from "react-redux";
+import { toast } from "react-toastify";
 import FormContainer from "../components/FormContainer";
+import { Loader } from "../components/Loader";
+import { setCredentials } from "../slices/authSlice";
+import { useLoginMutation } from "../slices/usersApiSlice";
+
 const LoginScreen = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const submitHandler = (e) => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { search } = useLocation();
+  // read ?redirect=/whatever, default to '/'
+  const sp = new URLSearchParams(search);
+  const redirect = sp.get("redirect") || "/";
+  // RTK Query mutation + loading flag
+  const [login, { isLoading }] = useLoginMutation();
+  // read current auth state
+  const { userInfo } = useSelector((state) => state.auth);
+  // If already logged in, bounce away from /login
+  useEffect(() => {
+    if (userInfo) {
+      navigate(redirect);
+    }
+  }, [userInfo, redirect, navigate]);
+
+  const submitHandler = async (e) => {
     e.preventDefault();
-    console.log("submit"); // placeholder; wiring to auth comes next step
+    try {
+      const res = await login({ email, password }).unwrap();
+      dispatch(setCredentials({ ...res }));
+      navigate(redirect);
+      toast.success("Login successful")
+    } catch (err) {
+      // show backend message if present, else a generic error
+      toast.error(err?.data?.message || err?.error || "Login failed");
+    }
   };
   return (
     <FormContainer>
@@ -34,10 +65,11 @@ const LoginScreen = () => {
         <Button type="submit" variant="primary" className="mt-2">
           Sign In
         </Button>
+        {isLoading && <Loader />}
       </Form>
       <Row className="py-3">
         <Col>
-          New Customer? <Link to="/register">Register</Link>
+          New Customer? <Link to={redirect !== '/' ? `/register?redirect=${redirect}` : '/register'}>Register</Link>
         </Col>
       </Row>
     </FormContainer>

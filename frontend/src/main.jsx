@@ -16,6 +16,8 @@ import "./assets/styles/index.css";
 import { Provider } from "react-redux";
 import store from "./store.js";
 import LoginScreen from "./screens/LoginScreen.jsx";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -31,5 +33,6 @@ const router = createBrowserRouter(
 createRoot(document.getElementById("root")).render(
   <Provider store={store}>
     <RouterProvider router={router} />
+    <ToastContainer />
   </Provider>
 );
