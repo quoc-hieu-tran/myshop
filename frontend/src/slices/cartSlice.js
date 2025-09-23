@@ -27,13 +27,17 @@ const cartSlice = createSlice({
       state.shippingAddress = action.payload;
       return updateCart(state); //we call updateCart(state) to have the "cart" saved in localStorage
     },
-    savePaymentMethod(state, action) {
+    savePaymentMethod: (state, action) => {
       state.paymentMethod = action.payload; // e.g., 'PayPal'
-      updateCart(state);
+      return updateCart(state);
+    },
+    clearCartItems: (state, action) => {
+      state.cartItems = [];
+      return updateCart(state);
     },
   },
 });
 
 export default cartSlice.reducer;
 //destructuring set of action creators
-export const { addToCart, removeFromCart, saveShippingAddress, savePaymentMethod } = cartSlice.actions;
+export const { addToCart, removeFromCart, saveShippingAddress, savePaymentMethod, clearCartItems } = cartSlice.actions;
