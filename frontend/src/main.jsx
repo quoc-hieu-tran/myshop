@@ -20,6 +20,8 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import RegisterScreen from "./screens/RegisterScreen.jsx";
 import ShippingScreen from "./screens/ShippingScreen.jsx";
+import PrivateRoute from "./components/PrivateRoute.jsx";
+
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<App></App>}>
@@ -29,6 +31,13 @@ const router = createBrowserRouter(
       <Route path="/login" element={<LoginScreen />} />
       <Route path="/register" element={<RegisterScreen />} />
       <Route path="/shipping" element={<ShippingScreen />} />
+      <Route element={<PrivateRoute />}>
+        <Route path="/shipping" element={<ShippingScreen />} />
+        {/* Add more protected paths here as you build them */}
+        {/* <Route path="/payment" element={<PaymentScreen />} /> */}
+        {/* <Route path="/placeorder" element={<PlaceOrderScreen />} /> */}
+        {/* <Route path="/profile" element={<ProfileScreen />} /> */}
+      </Route>
     </Route>
   )
 );
