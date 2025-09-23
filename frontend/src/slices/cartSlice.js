@@ -2,10 +2,8 @@ import { createSlice } from "@reduxjs/toolkit";
 import { addDecimals, updateCart } from "../../utils/cartUtils";
 
 const initialState = localStorage.getItem("cart")
-    ? JSON.parse(localStorage.getItem("cart"))
-    : { cartItems: [], shippingAddress: {}, paymentMethod: "PayPal" }
-;
-
+  ? JSON.parse(localStorage.getItem("cart"))
+  : { cartItems: [], shippingAddress: {}, paymentMethod: "PayPal" };
 const cartSlice = createSlice({
   name: "cart",
   initialState,
@@ -27,10 +25,15 @@ const cartSlice = createSlice({
     },
     saveShippingAddress: (state, action) => {
       state.shippingAddress = action.payload;
-      return updateCart(state); //we call updateCart(state) to have the "cart" saved in localStorage 
+      return updateCart(state); //we call updateCart(state) to have the "cart" saved in localStorage
+    },
+    savePaymentMethod(state, action) {
+      state.paymentMethod = action.payload; // e.g., 'PayPal'
+      updateCart(state);
     },
   },
 });
 
 export default cartSlice.reducer;
-export const { addToCart, removeFromCart, saveShippingAddress } = cartSlice.actions;
+//destructuring set of action creators
+export const { addToCart, removeFromCart, saveShippingAddress, savePaymentMethod } = cartSlice.actions;
