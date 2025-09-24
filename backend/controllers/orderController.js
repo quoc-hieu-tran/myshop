@@ -31,6 +31,9 @@ export const addOrderItems = asyncHandler(async (req, res) => {
     totalPrice,
   });
   const createdOrder = await order.save();
+  console.log(`Order ${createdOrder._id} has been placed successfully by user ${createdOrder.user}`);
+  
+  
   // 4 - Respond with 201 + created resource
   res.status(201).json(createdOrder);
 });
