@@ -17,7 +17,7 @@ router
 // /api/orders/mine
 router.get("/mine", protect, getMyOrders);
 // /api/orders/:id
-router.get("/:id", protect, getOrderById); // this scaffold uses admin for by-ID
+router.get("/:id", protect, getOrderById); // we now want regular users to access the order by-ID 
 // /api/orders/:id/pay
 router.put("/:id/pay", protect, updateOrderToPaid);
 // /api/orders/:id/deliver
