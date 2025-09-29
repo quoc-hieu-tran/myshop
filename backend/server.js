@@ -22,8 +22,11 @@ app.use(cookieParser());
 app.use("/api/products", productRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/users", userRoutes);
+app.get("/api/config/paypal", (req, res) => {
+  res.send({ clientId: process.env.PAYPAL_CLIENT_ID });
+});
 
-//error handling middleware after route handlers
+//error handling middleware after route handlers (any route defined after these middleware will NEVER be reached)
 app.use(notFound);
 app.use(errorHandler);
 
