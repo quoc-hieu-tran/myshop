@@ -12,7 +12,6 @@ import CartScreen from "./screens/CartScreen.jsx";
 //new custom bootstrap and styling
 import "./assets/styles/bootstrap.custom.css";
 import "./assets/styles/index.css";
-
 import { Provider } from "react-redux";
 import store from "./store.js";
 import LoginScreen from "./screens/LoginScreen.jsx";
@@ -24,6 +23,8 @@ import PrivateRoute from "./components/PrivateRoute.jsx";
 import PaymentScreen from "./screens/PaymentScreen.jsx";
 import PlaceOrderScreen from "./screens/PlaceOrderScreen.jsx";
 import OrderScreen from "./screens/OrderScreen.jsx";
+import { PayPalScriptProvider } from '@paypal/react-paypal-js';
+
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -47,8 +48,12 @@ const router = createBrowserRouter(
 );
 
 createRoot(document.getElementById("root")).render(
-  <Provider store={store}>
-    <RouterProvider router={router} />
-    <ToastContainer />
-  </Provider>
+  <StrictMode>
+    <Provider store={store}>
+      <PayPalScriptProvider deferLoading={true}>
+        <RouterProvider router={router} />
+      </PayPalScriptProvider>
+    </Provider>
+    <ToastContainer/>
+  </StrictMode>
 );
