@@ -23,8 +23,8 @@ import PrivateRoute from "./components/PrivateRoute.jsx";
 import PaymentScreen from "./screens/PaymentScreen.jsx";
 import PlaceOrderScreen from "./screens/PlaceOrderScreen.jsx";
 import OrderScreen from "./screens/OrderScreen.jsx";
-import { PayPalScriptProvider } from '@paypal/react-paypal-js';
-
+import { PayPalScriptProvider } from "@paypal/react-paypal-js";
+import ProfileScreen from "./screens/ProfileScreen.jsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -34,13 +34,12 @@ const router = createBrowserRouter(
       <Route path="/cart" element={<CartScreen />}></Route>
       <Route path="/login" element={<LoginScreen />} />
       <Route path="/register" element={<RegisterScreen />} />
-      <Route path="/shipping" element={<ShippingScreen />} />
       <Route element={<PrivateRoute />}>
         <Route path="/shipping" element={<ShippingScreen />} />
         <Route path="/payment" element={<PaymentScreen />} />
         <Route path="/placeorder" element={<PlaceOrderScreen />} />
         <Route path="/order/:id" element={<OrderScreen />} />
-        {/* <Route path="/profile" element={<ProfileScreen />} /> */}
+        <Route path="/profile" element={<ProfileScreen />} />
         {/* Add more protected paths here as you build them */}
       </Route>
     </Route>
@@ -53,7 +52,7 @@ createRoot(document.getElementById("root")).render(
       <PayPalScriptProvider deferLoading={true}>
         <RouterProvider router={router} />
       </PayPalScriptProvider>
+      <ToastContainer />
     </Provider>
-    <ToastContainer/>
   </StrictMode>
 );
