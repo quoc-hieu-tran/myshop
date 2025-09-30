@@ -77,18 +77,19 @@ const OrderScreen = () => {
     });
   }
   // Test-only approve Handler: skip PayPal, mark order paid immediately
-  async function onApproveTest() {
-    try {
-      await payOrder({
-        orderId: order._id,
-        details: { payer: {} }, // minimal shape the backend expects
-      });
-      await refetch();
-      toast.success("Payment successful (test)");
-    } catch (err) {
-      toast.error(err?.data?.message || err.message);
-    }
-  }
+  // async function onApproveTest() {
+  //   try {
+  //     await payOrder({
+  //       orderId: order._id,
+  //       details: { payer: {} }, // minimal shape the backend expects
+  //     });
+  //     await refetch();
+  //     toast.success("Payment successful (test)");
+  //   } catch (err) {
+  //     toast.error(err?.data?.message || err.message);
+  //   }
+  // }
+  
   // Error handler for PayPal button flow
   function onError(err) {
     toast.error(err?.message || "PayPal error");
