@@ -25,6 +25,8 @@ import PlaceOrderScreen from "./screens/PlaceOrderScreen.jsx";
 import OrderScreen from "./screens/OrderScreen.jsx";
 import { PayPalScriptProvider } from "@paypal/react-paypal-js";
 import ProfileScreen from "./screens/ProfileScreen.jsx";
+import AdminRoute from "./components/AdminRoute.jsx";
+import OrderListScreen from "./screens/admin/OrderListScreen.jsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -34,13 +36,18 @@ const router = createBrowserRouter(
       <Route path="/cart" element={<CartScreen />}></Route>
       <Route path="/login" element={<LoginScreen />} />
       <Route path="/register" element={<RegisterScreen />} />
+
       <Route element={<PrivateRoute />}>
+        {/* user-protected routes */}
         <Route path="/shipping" element={<ShippingScreen />} />
         <Route path="/payment" element={<PaymentScreen />} />
         <Route path="/placeorder" element={<PlaceOrderScreen />} />
         <Route path="/order/:id" element={<OrderScreen />} />
         <Route path="/profile" element={<ProfileScreen />} />
-        {/* Add more protected paths here as you build them */}
+        <Route element={<AdminRoute />}>
+          {/* admin-protected routes */}
+          <Route path="/admin/orderlist" element={<OrderListScreen />} />
+        </Route>
       </Route>
     </Route>
   )
