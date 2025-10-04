@@ -5,14 +5,31 @@ import { FaEdit, FaTrash } from "react-icons/fa";
 import { Loader } from "../../components/Loader";
 import Message from "../../components/Message";
 // Reuse the public getProducts endpoint for now
-import { useGetProductsQuery } from "../../slices/productsApiSlice";
+import { useGetProductsQuery, useCreateProductMutation } from "../../slices/productsApiSlice";
 const ProductListScreen = () => {
   // Fetch products (reusing the public endpoint)
-  const { data: products, isLoading, error } = useGetProductsQuery();
+  const { data: products, isLoading, error, refetch } = useGetProductsQuery();
+
+  const [createProduct, { isLoading: loadingCreate }] = useCreateProductMutation();
+
   // Delete handler (stub for now; wired in upcoming lessons)
   const deleteHandler = (id) => {
     console.log("delete:", id);
   };
+  //create Product Handler
+  const createProductHandler = async () => {
+    if (window.confirm("Are you sure you want to create a new product?")) {
+      try {
+        await createProduct().unwrap(); // no payload; server fills sample fields
+        // If not using tags, manually refresh the list:
+        await refetch();
+        toast.success("Sample product created");
+      } catch (err) {
+        toast.error(err?.data?.message || err.error || "Failed to create product");
+      }
+    }
+  };
+
   return (
     <>
       {/* Top row: title + Create Product button */}
@@ -22,12 +39,13 @@ const ProductListScreen = () => {
         </Col>
         <Col className="text-end">
           {/* Create Product button (functionality will come later) */}
-          <Button className="my-3 btn-sm">
+          <Button className="my-3 btn-sm" onClick={createProductHandler}>
             <FaEdit className="me-2" />
             Create Product
           </Button>
         </Col>
       </Row>
+      {loadingCreate && <Loader />}
       {/* Content: loading / error / table */}
       {isLoading ? (
         <Loader />
