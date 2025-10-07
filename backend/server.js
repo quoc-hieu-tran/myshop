@@ -7,6 +7,8 @@ import { notFound, errorHandler } from "./middleware/errorMiddleware.js";
 import userRoutes from "./routes/userRoutes.js";
 import cookieParser from "cookie-parser";
 import orderRoutes from "./routes/orderRoutes.js";
+import path from "path";
+import uploadRoutes from "./routes/uploadRoutes.js";
 
 dotenv.config();
 const PORT = process.env.PORT || 5000;
@@ -25,6 +27,10 @@ app.use("/api/users", userRoutes);
 app.get("/api/config/paypal", (req, res) => {
   res.send({ clientId: process.env.PAYPAL_CLIENT_ID });
 });
+
+app.use("/api/upload", uploadRoutes);
+const __dirname = path.resolve(); // ESM-safe dirname
+app.use("/uploads", express.static(path.join(__dirname, "/uploads")));
 
 //error handling middleware after route handlers (any route defined after these middleware will NEVER be reached)
 app.use(notFound);
