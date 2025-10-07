@@ -8,6 +8,7 @@ export const productsApiSlice = apiSlice.injectEndpoints({
         url: PRODUCTS_URL,
       }),
       keepUnusedDataFor: 5,
+      providesTags: ["Products"],
     }),
     getProductDetails: builder.query({
       query: (productId) => ({
@@ -19,8 +20,7 @@ export const productsApiSlice = apiSlice.injectEndpoints({
         url: PRODUCTS_URL, // '/api/products'
         method: "POST",
       }),
-      // Optional: if already use tags across products, enable these:
-      // invalidatesTags: ['Product'],
+      invalidatesTags: ["Products"],
     }),
     updateProduct: builder.mutation({
       query: (data) => ({
@@ -28,9 +28,12 @@ export const productsApiSlice = apiSlice.injectEndpoints({
         method: "PUT",
         body: data,
       }),
-      // If already use RTK Query tags:
-      // invalidatesTags: ['Product'],
+      invalidatesTags: ["Products"],
     }),
+    // deleteProduct: builder.mutation({
+    //   query: (productId) => ({ url: `${PRODUCTS_URL}/${productId}`, method: "DELETE" }),
+    //   invalidatesTags: ["Products"],
+    // }),
   }),
 });
 
