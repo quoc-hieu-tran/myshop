@@ -7,6 +7,7 @@ import Message from "../components/Message";
 import FormContainer from "../components/FormContainer";
 import { useGetProductDetailsQuery } from "../slices/productsApiSlice"; // adjust name if different
 import { useUpdateProductMutation } from "../slices/productsApiSlice";
+import { useUploadProductImageMutation } from "../slices/productsApiSlice";
 const ProductEditScreen = () => {
   const { id: productId } = useParams();
   const navigate = useNavigate();
@@ -22,7 +23,9 @@ const ProductEditScreen = () => {
   const { data: product, isLoading, error, refetch } = useGetProductDetailsQuery(productId);
   // Mutation to update
   const [updateProduct, { isLoading: loadingUpdate }] = useUpdateProductMutation();
-  // Hydrate form from loaded product
+
+  const [uploadProductImage, { isLoading: loadingUpload }] = useUploadProductImageMutation();
+
   useEffect(() => {
     if (product) {
       setName(product.name || "");
@@ -94,12 +97,32 @@ const ProductEditScreen = () => {
               <Form.Label>Image</Form.Label>
               <Form.Control
                 type="text"
-                placeholder="Image path (upload in next lesson)"
+                placeholder="Enter Image URL or upload a file"
                 value={image}
                 onChange={(e) => setImage(e.target.value)}
               />
+              {/* File input */}
+              <Form.Control
+                type="file"
+                className="mt-2"
+                label="Choose File"
+                onChange={async (e) => {
+                  const file = e.target.files?.[0];
+                  if (!file) return;
+                  const formData = new FormData();
+                  formData.append("image", file); // field name must match backend
+                  try {
+                    const res = await uploadProductImage(formData).unwrap();
+                    // res: { message: 'Image uploaded', image: '/uploads/filename.jpg' }
+                    setImage(res.image);
+                    toast.success(res.message || "Image uploaded");
+                  } catch (err) {
+                    toast.error(err?.data?.message || err.error || "Image upload failed");
+                  }
+                }}
+              />
             </Form.Group>
-
+            {loadingUpload && <Loader />}
             {/* BRAND */}
             <Form.Group className="my-2" controlId="brand">
               <Form.Label>Brand</Form.Label>
