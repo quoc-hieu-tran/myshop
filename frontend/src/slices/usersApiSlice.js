@@ -33,7 +33,13 @@ export const usersApiSlice = apiSlice.injectEndpoints({
         body: data, // { _id, name, email, password? }
       }),
     }),
+    getUsers: builder.query({
+      query: () => USERS_URL, // GET /api/users
+      keepUnusedDataFor: 5, // small cache window
+      providesTags: ["Users"], // lets delete/edit invalidate the list later
+    }),
   }),
 });
 
-export const { useLoginMutation, useLogoutMutation, useRegisterMutation, useProfileMutation } = usersApiSlice;
+export const { useLoginMutation, useLogoutMutation, useRegisterMutation, useProfileMutation, useGetUsersQuery } =
+  usersApiSlice;
