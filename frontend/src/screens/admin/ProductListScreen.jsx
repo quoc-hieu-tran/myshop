@@ -4,19 +4,17 @@ import { LinkContainer } from "react-router-bootstrap";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import { Loader } from "../../components/Loader";
 import Message from "../../components/Message";
+import { toast } from "react-toastify";
 // Reuse the public getProducts endpoint for now
-import { useGetProductsQuery, useCreateProductMutation } from "../../slices/productsApiSlice";
+import { useGetProductsQuery, useCreateProductMutation, useDeleteProductMutation } from "../../slices/productsApiSlice";
 const ProductListScreen = () => {
   // Fetch products (reusing the public endpoint)
   const { data: products, isLoading, error, refetch } = useGetProductsQuery();
 
   const [createProduct, { isLoading: loadingCreate }] = useCreateProductMutation();
+  const [deleteProduct, { isLoading: loadingDelete }] = useDeleteProductMutation();
 
-  // Delete handler (stub for now; wired in upcoming lessons)
-  const deleteHandler = (id) => {
-    console.log("delete:", id);
-  };
-  //create Product Handler
+  //Handlers for Buttons
   const createProductHandler = async () => {
     if (window.confirm("Are you sure you want to create a new product?")) {
       try {
@@ -26,6 +24,18 @@ const ProductListScreen = () => {
         toast.success("Sample product created");
       } catch (err) {
         toast.error(err?.data?.message || err.error || "Failed to create product");
+      }
+    }
+  };
+  const deleteHandler = async (id) => {
+    if (window.confirm("Are you sure you want to delete this product?")) {
+      try {
+        await deleteProduct(id).unwrap();
+        // If not using tags, manually refresh:
+        await refetch();
+        toast.success("Product deleted");
+      } catch (err) {
+        toast.error(err?.data?.message || err.error || "Failed to delete product");
       }
     }
   };
@@ -46,6 +56,7 @@ const ProductListScreen = () => {
         </Col>
       </Row>
       {loadingCreate && <Loader />}
+      {loadingDelete && <Loader />}
       {/* Content: loading / error / table */}
       {isLoading ? (
         <Loader />

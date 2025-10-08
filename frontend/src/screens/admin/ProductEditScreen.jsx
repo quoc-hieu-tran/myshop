@@ -2,12 +2,15 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { Form, Button } from "react-bootstrap";
 import { toast } from "react-toastify";
-import { Loader } from "../components/Loader";
-import Message from "../components/Message";
-import FormContainer from "../components/FormContainer";
-import { useGetProductDetailsQuery } from "../slices/productsApiSlice"; // adjust name if different
-import { useUpdateProductMutation } from "../slices/productsApiSlice";
-import { useUploadProductImageMutation } from "../slices/productsApiSlice";
+import { Loader } from "../../components/Loader";
+import Message from "../../components/Message";
+import FormContainer from "../../components/FormContainer";
+import {
+  useGetProductDetailsQuery,
+  useUpdateProductMutation,
+  useUploadProductImageMutation,
+} from "../../slices/productsApiSlice";
+
 const ProductEditScreen = () => {
   const { id: productId } = useParams();
   const navigate = useNavigate();

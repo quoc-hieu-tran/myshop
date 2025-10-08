@@ -28,7 +28,7 @@ import ProfileScreen from "./screens/ProfileScreen.jsx";
 import AdminRoute from "./components/AdminRoute.jsx";
 import OrderListScreen from "./screens/admin/OrderListScreen.jsx";
 import ProductListScreen from "./screens/admin/ProductListScreen.jsx";
-import ProductEditScreen from "./screens/ProductEditScreen.jsx";
+import ProductEditScreen from "./screens/admin/ProductEditScreen.jsx";
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<App></App>}>
@@ -62,7 +62,16 @@ createRoot(document.getElementById("root")).render(
       <PayPalScriptProvider deferLoading={true}>
         <RouterProvider router={router} />
       </PayPalScriptProvider>
-      <ToastContainer />
+      <ToastContainer
+        position="top-right"
+        autoClose={3000} // or false to stay open
+        hideProgressBar={true} // hides timing bar for all toasts
+        newestOnTop={false}
+        closeOnClick
+        pauseOnHover
+        draggable
+        theme="colored"
+      />
     </Provider>
   </StrictMode>
 );
