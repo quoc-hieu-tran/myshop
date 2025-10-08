@@ -6,7 +6,6 @@ import generateToken from "../utils/generateToken.js";
 // @route   POST /api/users/auth
 // @access  Public
 const authUser = asyncHandler(async (req, res) => {
-  
   const { email, password } = req.body;
   const user = await User.findOne({ email });
   if (user && (await user.matchPassword(password))) {
@@ -78,29 +77,27 @@ const getUserProfile = asyncHandler(async (req, res) => {
     res.status(404);
     throw new Error("User not found");
   }
-
-
 });
 // @desc    Update user profile
 // @route   PUT /api/users/profile
 // @access  Private
 const updateUserProfile = asyncHandler(async (req, res) => {
   const user = await User.findById(req.user._id);
-if (!user) {
+  if (!user) {
     res.status(404);
-    throw new Error('User not found');
+    throw new Error("User not found");
   }
-// Partial updates: only overwrite what was sent
+  // Partial updates: only overwrite what was sent
   user.name = req.body.name ?? user.name;
   user.email = req.body.email ?? user.email;
-// Only touch password if client sent one (pre-save hook will hash)
+  // Only touch password if client sent one (pre-save hook will hash)
   if (req.body.password) {
     user.password = req.body.password;
   }
 
-const updatedUser = await user.save();
+  const updatedUser = await user.save();
 
-return res.status(200).json({
+  return res.status(200).json({
     _id: updatedUser._id,
     name: updatedUser.name,
     email: updatedUser.email,
@@ -112,27 +109,60 @@ return res.status(200).json({
 // @route   GET /api/users
 // @access  Private/Admin
 const getUsers = asyncHandler(async (req, res) => {
-  res.send("get users");
+  const users = await User.find({}).select("-password");
+  res.status(200).json(users);
 });
 // @desc    Delete user (admin)
 // @route   DELETE /api/users/:id
 // @access  Private/Admin
 const deleteUser = asyncHandler(async (req, res) => {
-  res.send("delete user");
+  const user = await User.findById(req.params.id);
+
+  if (!user) {
+    res.status(404);
+    throw new Error("User not found");
+  }
+  if (user.isAdmin) {
+    res.status(400);
+    throw new Error("Cannot delete admin user");
+  }
+  await User.deleteOne({ _id: user._id });
+  res.status(200).json({ message: "User deleted successfully" });
 });
 // @desc    Get user by ID (admin)
 // @route   GET /api/users/:id
 // @access  Private/Admin
 const getUserById = asyncHandler(async (req, res) => {
-  res.send("get user by id");
+  const user = await User.findById(req.params.id).select("-password");
+  if (!user) {
+    res.status(404);
+    throw new Error("User not found");
+  }
+  res.status(200).json(user);
 });
 // @desc    Update user (admin)
 // @route   PUT /api/users/:id
 // @access  Private/Admin
 const updateUser = asyncHandler(async (req, res) => {
-  res.send("update user");
+  const user = await User.findById(req.params.id);
+  if (!user) {
+    res.status(404);
+    throw new Error("User not found");
+  }
+  user.name = req.body.name ?? user.name;
+  user.email = req.body.email ?? user.email;
+  // Ensure boolean coercion for isAdmin
+  if (typeof req.body.isAdmin !== "undefined") {
+    user.isAdmin = Boolean(req.body.isAdmin);
+  }
+  const updated = await user.save();
+  res.status(200).json({
+    _id: updated._id,
+    name: updated.name,
+    email: updated.email,
+    isAdmin: updated.isAdmin,
+  });
 });
-
 
 export {
   authUser,
