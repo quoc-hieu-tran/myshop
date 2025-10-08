@@ -45,6 +45,21 @@ export const usersApiSlice = apiSlice.injectEndpoints({
       }),
       invalidatesTags: ["Users"], // optional if you plan to call refetch() manually
     }),
+    getUserDetails: builder.query({
+      query: (userId) => `${USERS_URL}/${userId}`, // GET /api/users/:id
+      keepUnusedDataFor: 5,
+      providesTags: (result, error, id) => [{ type: "User", id }],
+    }),
+    updateUser: builder.mutation({
+      // send the whole data object; it contains userId and fields
+      query: (data) => ({
+        url: `${USERS_URL}/${data.userId}`, // PUT /api/users/:id
+        method: "PUT",
+        body: data, // { userId, name, email, isAdmin }
+      }),
+      // invalidate both the single user and the list so UIs refresh
+      invalidatesTags: (result, error, data) => [{ type: "User", id: data.userId }, "Users"],
+    }),
   }),
 });
 
@@ -55,4 +70,6 @@ export const {
   useProfileMutation,
   useGetUsersQuery,
   useDeleteUserMutation,
+  useUpdateUserMutation,
+  useGetUserDetailsQuery,
 } = usersApiSlice;
