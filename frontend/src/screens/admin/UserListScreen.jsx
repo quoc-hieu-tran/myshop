@@ -2,15 +2,27 @@ import React from "react";
 import { Table, Button } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
 import { FaTrash, FaEdit, FaTimes, FaCheck } from "react-icons/fa";
-import {Loader} from "../../components/Loader";
+import { Loader } from "../../components/Loader";
 import Message from "../../components/Message";
-import { useGetUsersQuery } from "../../slices/usersApiSlice";
+import { useGetUsersQuery, useDeleteUserMutation } from "../../slices/usersApiSlice";
+import { toast } from "react-toastify";
+
 const UserListScreen = () => {
   const { data: users, isLoading, error, refetch } = useGetUsersQuery();
+  const [deleteUser, { isLoading: loadingDelete }] = useDeleteUserMutation();
   // Delete handler (stub; wired in the following step)
-  const deleteHandler = (id) => {
-    console.log("delete user:", id);
-    // next lesson: call useDeleteUserMutation, confirm, invalidate/refetch, toast
+  const deleteHandler = async (id) => {
+    if (window.confirm("Are you sure?")) {
+      // quick confirm
+      try {
+        await deleteUser(id).unwrap();
+        // If you DIDN’T add tags above, keep this manual refresh:
+        await refetch();
+        toast.success("User deleted");
+      } catch (err) {
+        toast.error(err?.data?.message || err.error || "Failed to delete user");
+      }
+    }
   };
   return (
     <>
@@ -31,6 +43,7 @@ const UserListScreen = () => {
             </tr>
           </thead>
           <tbody>
+            {loadingDelete && <Loader />}
             {users?.map((user) => (
               <tr key={user._id}>
                 <td>{user._id}</td>
