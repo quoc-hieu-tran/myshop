@@ -84,7 +84,7 @@ const createProductReview = asyncHandler(async (req, res) => {
   const alreadyReviewed = product.reviews.find((rev) => rev.user.toString() === req.user._id.toString());
   if (alreadyReviewed) {
     res.status(400);
-    throw new Error("Product already reviewed");
+    throw new Error(`Product already reviewed by this user`);
   }
   // Build the new review (name is the username of the logged-in user)
   const review = {
