@@ -6,9 +6,11 @@ const getProducts = asyncHandler(async (req, res) => {
   const pageSize = Number(process.env.PAGE_SIZE) || 8;
   // page number from query string (?pageNumber=2)
   const page = Number(req.query.pageNumber) || 1;
-  const count = await Product.countDocuments({}); // total products
+  const keyword = req.query.keyword ? { name: { $regex: req.query.keyword, $options: "i" } } : {};
+  const count = await Product.countDocuments({ ...keyword }); // total products
+
   // fetch only current page
-  const products = await Product.find({})
+  const products = await Product.find({ ...keyword })
     .limit(pageSize)
     .skip(pageSize * (page - 1));
 
