@@ -3,16 +3,21 @@ import { Col, Row } from "react-bootstrap";
 import products from "../products";
 import Product from "../components/Product";
 import { useGetProductsQuery } from "../slices/productsApiSlice";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import Paginate from "../components/Paginate";
 import { Loader } from "../components/Loader";
+import { useState } from "react";
 
 const HomeScreen = (props) => {
   const { keyword = "", pageNumber = "1" } = useParams();
   const { data, isLoading, error } = useGetProductsQuery({ keyword, pageNumber });
-
   return (
     <>
+      {keyword && (
+        <div className="mb-4">
+          <Link to="/">Go Back</Link>
+        </div>
+      )}
       {isLoading ? (
         <Loader />
       ) : error ? (
