@@ -2,8 +2,17 @@ import Product from "../models/productModel.js";
 import asyncHandler from "../middleware/asyncHandler.js";
 
 const getProducts = asyncHandler(async (req, res) => {
-  const products = await Product.find({});
-  res.json(products);
+  // page size: use a small number while testing; later bump to 8 or 12
+  const pageSize = Number(process.env.PAGE_SIZE) || 8;
+  // page number from query string (?pageNumber=2)
+  const page = Number(req.query.pageNumber) || 1;
+  const count = await Product.countDocuments({}); // total products
+  // fetch only current page
+  const products = await Product.find({})
+    .limit(pageSize)
+    .skip(pageSize * (page - 1));
+
+  res.json({ products, page, pages: Math.ceil(count / pageSize) });
 });
 
 const getProductById = asyncHandler(async (req, res) => {
