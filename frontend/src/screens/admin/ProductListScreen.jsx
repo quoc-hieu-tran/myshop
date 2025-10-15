@@ -5,11 +5,14 @@ import { FaEdit, FaTrash } from "react-icons/fa";
 import { Loader } from "../../components/Loader";
 import Message from "../../components/Message";
 import { toast } from "react-toastify";
-// Reuse the public getProducts endpoint for now
 import { useGetProductsQuery, useCreateProductMutation, useDeleteProductMutation } from "../../slices/productsApiSlice";
+import { useParams } from "react-router-dom";
+import Paginate from "../../components/Paginate";
+
 const ProductListScreen = () => {
   // Fetch products (reusing the public endpoint)
-  const { data: products, isLoading, error, refetch } = useGetProductsQuery();
+  const { pageNumber = "1" } = useParams();
+  const { data, isLoading, error, refetch } = useGetProductsQuery({ pageNumber });
 
   const [createProduct, { isLoading: loadingCreate }] = useCreateProductMutation();
   const [deleteProduct, { isLoading: loadingDelete }] = useDeleteProductMutation();
@@ -76,7 +79,7 @@ const ProductListScreen = () => {
               </tr>
             </thead>
             <tbody>
-              {products?.map((product) => (
+              {data?.products?.map((product) => (
                 <tr key={product._id}>
                   <td>{product._id}</td>
                   <td>{product.name}</td>
@@ -100,7 +103,7 @@ const ProductListScreen = () => {
             </tbody>
           </Table>
           {/* Pagination placeholder (we’ll add real pagination & search later) */}
-          {/* <Paginate pages={pages} page={page} isAdmin={true} /> */}
+          <Paginate pages={data?.pages} page={data?.page} isAdmin />
         </>
       )}
     </>

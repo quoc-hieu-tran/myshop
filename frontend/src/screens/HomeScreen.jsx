@@ -4,25 +4,31 @@ import products from "../products";
 import Product from "../components/Product";
 import { useGetProductsQuery } from "../slices/productsApiSlice";
 import { useParams } from "react-router-dom";
+import Paginate from "../components/Paginate";
+import { Loader } from "../components/Loader";
 
 const HomeScreen = (props) => {
   const { pageNumber = "1" } = useParams();
   const { data, isLoading, error } = useGetProductsQuery({ pageNumber });
 
-  return isLoading ? (
-    <h2>Loading</h2>
-  ) : error ? (
-    <div>{error?.data?.message || error.error}</div>
-  ) : (
+  return (
     <>
-      <h1>Latest Product</h1>
-      <Row>
-        {data?.products?.map((product) => (
-          <Col key={product._id} sm={12} md={6} lg={4} xl={3}>
-            <Product product={product}></Product>
-          </Col>
-        ))}
-      </Row>
+      {isLoading ? (
+        <Loader />
+      ) : error ? (
+        <Message variant="danger">{error?.data?.message || error.error}</Message>
+      ) : (
+        <>
+          <Row>
+            {data?.products?.map((p) => (
+              <Col key={p._id} sm={12} md={6} lg={4} xl={3}>
+                <Product product={p} />
+              </Col>
+            ))}
+          </Row>
+          <Paginate pages={data.pages} page={data.page} />
+        </>
+      )}
     </>
   );
 };
