@@ -8,17 +8,21 @@ import Paginate from "../components/Paginate";
 import { Loader } from "../components/Loader";
 import { useState } from "react";
 import ProductCarousel from "../components/ProductCarousel";
+import Meta from "../components/Meta";
 
 const HomeScreen = (props) => {
   const { keyword = "", pageNumber = "1" } = useParams();
   const { data, isLoading, error } = useGetProductsQuery({ keyword, pageNumber });
   return (
     <>
+      <Meta title={keyword ? `Search: ${keyword}` : undefined} />
       {keyword ? (
         <div className="mb-4">
           <Link to="/">Go Back</Link>
         </div>
-      ) : <ProductCarousel/>}
+      ) : (
+        <ProductCarousel />
+      )}
       {isLoading ? (
         <Loader />
       ) : error ? (

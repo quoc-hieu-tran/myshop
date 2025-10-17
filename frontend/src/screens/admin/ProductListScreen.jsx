@@ -8,6 +8,7 @@ import { toast } from "react-toastify";
 import { useGetProductsQuery, useCreateProductMutation, useDeleteProductMutation } from "../../slices/productsApiSlice";
 import { useParams } from "react-router-dom";
 import Paginate from "../../components/Paginate";
+import Meta from "../../components/Meta";
 
 const ProductListScreen = () => {
   // Fetch products (reusing the public endpoint)
@@ -45,6 +46,7 @@ const ProductListScreen = () => {
 
   return (
     <>
+      <Meta title="Admin - Products" />
       {/* Top row: title + Create Product button */}
       <Row className="align-items-center">
         <Col>
