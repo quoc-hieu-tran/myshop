@@ -7,17 +7,18 @@ import { Link, useParams } from "react-router-dom";
 import Paginate from "../components/Paginate";
 import { Loader } from "../components/Loader";
 import { useState } from "react";
+import ProductCarousel from "../components/ProductCarousel";
 
 const HomeScreen = (props) => {
   const { keyword = "", pageNumber = "1" } = useParams();
   const { data, isLoading, error } = useGetProductsQuery({ keyword, pageNumber });
   return (
     <>
-      {keyword && (
+      {keyword ? (
         <div className="mb-4">
           <Link to="/">Go Back</Link>
         </div>
-      )}
+      ) : <ProductCarousel/>}
       {isLoading ? (
         <Loader />
       ) : error ? (

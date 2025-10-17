@@ -17,6 +17,17 @@ const getProducts = asyncHandler(async (req, res) => {
   res.json({ products, page, pages: Math.ceil(count / pageSize) });
 });
 
+// @desc   Get top rated products
+// @route  GET /api/products/top
+// @access Public
+const getTopProducts = asyncHandler(async (req, res) => {
+  const products = await Product.find({})
+    .sort({ rating: -1 }) // highest first
+    .limit(3); // only three
+  res.status(200).json(products);
+});
+
+
 const getProductById = asyncHandler(async (req, res) => {
   const product = await Product.findById(req.params.id);
   if (product) {
@@ -113,4 +124,12 @@ const createProductReview = asyncHandler(async (req, res) => {
   res.status(201).json({ message: "Review added" });
 });
 
-export { getProducts, getProductById, createProduct, updateProduct, deleteProduct, createProductReview };
+export {
+  getProducts,
+  getProductById,
+  createProduct,
+  updateProduct,
+  deleteProduct,
+  createProductReview,
+  getTopProducts,
+};
