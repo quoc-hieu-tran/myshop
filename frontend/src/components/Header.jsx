@@ -10,7 +10,6 @@ import { logout } from "../slices/authSlice";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import SearchBox from "./SearchBox";
-import Message from "./Message";
 
 const Header = (props) => {
   const { cartItems } = useSelector((state) => state.cart);

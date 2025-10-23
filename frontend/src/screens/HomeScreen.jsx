@@ -9,7 +9,7 @@ import { Loader } from "../components/Loader";
 import { useState } from "react";
 import ProductCarousel from "../components/ProductCarousel";
 import Meta from "../components/Meta";
-
+import Message from "../components/Message";
 const HomeScreen = (props) => {
   const { keyword = "", pageNumber = "1" } = useParams();
   const { data, isLoading, error } = useGetProductsQuery({ keyword, pageNumber });
