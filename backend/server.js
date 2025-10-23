@@ -32,6 +32,20 @@ app.use("/api/upload", uploadRoutes);
 const __dirname = path.resolve(); // ESM-safe dirname
 app.use("/uploads", express.static(path.join(__dirname, "/uploads")));
 
+if (process.env.NODE_ENV === "production") {
+  // Serve static files from React app
+  app.use(express.static(path.join(__dirname, "/frontend/dist")));
+  // Any non-API route should return React's index.html
+  app.get(/^\/(?!api|uploads).*/, (req, res) => {
+    res.sendFile(path.resolve(__dirname, "frontend", "dist", "index.html"));
+  });
+} else {
+  // Dev mode: keep a simple root response (React runs on Vite/CRA dev server)
+  app.get("/", (req, res) => {
+    res.send("API is running...");
+  });
+}
+
 //error handling middleware after route handlers (any route defined after these middleware will NEVER be reached)
 app.use(notFound);
 app.use(errorHandler);
